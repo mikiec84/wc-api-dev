@@ -142,7 +142,39 @@ class WC_Tests_API_Order_Notes extends WC_REST_Unit_Test_Case {
 
 		wc_delete_order_note( $data['id'] );
 	}
-	
+
+	/**
+	 * Tests creating an order note.
+	 * @since 3.0.0
+	 */
+	public function test_create_system_note() {
+		wp_set_current_user( $this->user );
+		$request = new WP_REST_Request( 'POST', "/wc/v3/orders/$this->order_id/notes" );
+		$request->set_body_params( array(
+			'customer_note' => true,
+			'note'          => 'This is testing content.',
+		) );
+		$response = $this->server->dispatch( $request );
+		$data     = $response->get_data();
+		$note     = wc_get_order_note( $data['id'] );
+
+		$this->assertEquals( 201, $response->get_status() );
+		// Verify the API response has correct data
+		$this->assertArrayHasKey( 'customer_note', $data );
+		$this->assertArrayHasKey( 'date_created', $data );
+		$this->assertArrayHasKey( 'note', $data );
+		$this->assertArrayHasKey( 'author', $data );
+		$this->assertEquals( $data['note'], 'This is testing content.' );
+		$this->assertEquals( $data['author'], 'system' );
+
+		// Verify that Note object has correct data
+		$this->assertEquals( $note->customer_note, true );
+		$this->assertEquals( $note->added_by, 'system' );
+		$this->assertEquals( $note->content, 'This is testing content.' );
+
+		wc_delete_order_note( $data['id'] );
+	}
+
 	/**
 	 * Tests creating an order note without required fields.
 	 * @since 3.0.0
