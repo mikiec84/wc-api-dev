@@ -8,13 +8,13 @@
 class WC_Tests_API_Order_Notes extends WC_REST_Unit_Test_Case {
 
 	/**
-	 * Array of notes to track
+	 * Array of notes to track.
 	 * @var array
 	 */
 	protected $notes = array();
 
 	/**
-	 * An order to hold these notes
+	 * An order to hold these notes.
 	 * @var int
 	 */
 	protected $order_id;
@@ -87,7 +87,7 @@ class WC_Tests_API_Order_Notes extends WC_REST_Unit_Test_Case {
 	}
 
 	/**
-	 * Tests getting a single order.
+	 * Tests getting a single order note.
 	 * @since 3.0.0
 	 */
 	public function test_get_item() {
@@ -110,7 +110,7 @@ class WC_Tests_API_Order_Notes extends WC_REST_Unit_Test_Case {
 	}
 	
 	/**
-	 * Tests creating an order note.
+	 * Tests creating an order note by a given user.
 	 * @since 3.0.0
 	 */
 	public function test_create_note() {
@@ -144,7 +144,7 @@ class WC_Tests_API_Order_Notes extends WC_REST_Unit_Test_Case {
 	}
 
 	/**
-	 * Tests creating an order note.
+	 * Tests creating an order note by the "system".
 	 * @since 3.0.0
 	 */
 	public function test_create_system_note() {
