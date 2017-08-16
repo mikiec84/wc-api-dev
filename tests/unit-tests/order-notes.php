@@ -94,14 +94,18 @@ class WC_Tests_API_Order_Notes extends WC_REST_Unit_Test_Case {
 		wp_set_current_user( $this->user );
 		$note          = WC_Helper_Order_Note::create_note( $this->order_id, $this->user );
 		$this->notes[] = $note;
-		$response      = $this->server->dispatch( new WP_REST_Request( 'GET', "/wc/v3/orders/$this->order_id/notes/$note->comment_ID" ) );
+		$request       = new WP_REST_Request( 'GET', "/wc/v3/orders/$this->order_id/notes/$note->comment_ID" );
+		$response      = $this->server->dispatch( $request );
 		$data          = $response->get_data();
 
 		$this->assertEquals( 200, $response->get_status() );
 		$this->assertEquals( $note->comment_ID, $data['id'] );
 		$this->assertArrayHasKey( 'customer_note', $data );
 		$this->assertArrayHasKey( 'date_created', $data );
+		$this->assertArrayHasKey( 'author', $data );
 		$this->assertArrayHasKey( 'note', $data );
+		$this->assertEquals( $data['author'], 'system' );
+		$this->assertEquals( $data['note'], 'This is an order note.' );
 		$this->stoppit_and_tidyup();
 	}
 	
